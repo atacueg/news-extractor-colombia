@@ -131,21 +131,22 @@ Estructura esperada:
 
 ## Visualizaciones en PowerBI
 
-El JSON de salida del pipeline alimenta tableros en PowerBI para analizar
-distribución geográfica y tendencias de los eventos registrados.
+El JSON de salida de `main.go` alimenta tableros en PowerBI para explorar
+los eventos extraidos de las noticias: distribución geográfica, tipo de arma,
+motivo y tendencia temporal.
 
-### Mapa de calor — Bogotá por localidad
+### Mapa por localidad — Bogotá
 
-Geolocalización de eventos en Bogotá agrupados por localidad. Permite identificar
-las zonas con mayor concentración de incidentes y cruzar con variables como
-tipo de arma o motivo.
+Eventos extraídos de noticias geolocalizados dentro de Bogotá por localidad.
+Permite ver dónde se concentran los incidentes reportados en prensa y cruzarlos
+con variables como barrio, tipo de arma o motivo.
 
 ![Mapa Bogotá](docs/mapa_bogota.png)
 
-### Dashboard estadísticas RNMC 2024–2025
+### Dashboard de noticias procesadas
 
-Resumen de indicadores del Registro Nacional de Medidas Correctivas: total de
-registros procesados, distribución por ciudad, tipo de arma, motivo y tendencia
-mensual. Vista comparativa entre 2024 y 2025.
+Vista general del resultado del pipeline sobre los JSON de noticias extraídas:
+total de eventos clasificados, distribución por ciudad, tipo de arma, motivo
+y tendencia mensual del período analizado.
 
-![Dashboard RNMC](docs/dashboard_rnmc.png)
+![Dashboard noticias](docs/dashboard_rnmc.png)
