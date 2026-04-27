@@ -55,3 +55,71 @@ de 2026.
 
 - Los archivos `.json` de resultados están en `.gitignore` (datos internos).
 - Las claves API nunca van en el código, siempre por variable de entorno.
+
+
+## Pipeline de análisis (main.go)
+
+Una vez recolectadas las noticias, `main.go` las procesa para estructurar la información en un formato útil para mapas y análisis.
+
+```
+go run main.go [entrada.json] [salida.json]
+```
+
+Lee un JSON de noticias crudas y produce un JSON con cada evento clasificado.
+
+### Qué extrae por noticia
+
+| Campo | Descripción |
+|-------|-------------|
+| `ciudad` | Ciudad donde ocurrió el evento |
+| `departamento` | Inferido del municipio o mencionado en el texto |
+| `barrio` | Barrio, vereda, estadio o punto de referencia |
+| `fechaevento` | Fecha real del evento (no la de publicación) |
+| `motivo` | Tipo de causa: intolerancia, alcohol, pasional, escolar, etc. |
+| `tipoarma` | Arma de fuego, arma blanca, machete o vacío |
+| `heridos` | Conteo de heridos mencionados |
+| `fallecidos` | Conteo de fallecidos mencionados |
+| `atendido` | Si hubo atención médica |
+| `hospital` | Nombre del centro médico si se menciona |
+| `coordenadas` | Lat/Lng vía Google Geocoding API (opcional) |
+
+### Cómo detecta la ciudad
+
+Usa tres fuentes en orden de prioridad:
+1. Patrón explícito en el título (`en Cali`, `en Medellín`)
+2. Búsqueda por scoring sobre el listado de municipios colombianos (`municipiospordepartamento.json`)
+3. Nombre de la fuente periodística como fallback (ej. El País → Cali)
+
+Si detecta una localidad bogotana (Suba, Kennedy, Bosa, etc.) la convierte a `Bogota` y mueve el nombre al campo `barrio`.
+
+### Filtros de exclusión
+
+Descarta automáticamente noticias:
+- Internacionales (Venezuela, Chile, México, etc.)
+- Deportivas sin componente de violencia civil
+- De abuso o explotación sexual
+
+### NER
+
+Si hay un microservicio de NER corriendo en `localhost:5000/ner`, lo usa para refinar ciudad y barrio. Si no está disponible, el pipeline continúa sin él.
+
+### Geolocalización
+
+Opcional. Si existe la variable de entorno `GEOCODE_API_KEY`, geocodifica el barrio + ciudad y agrega coordenadas al resultado.
+
+```bash
+set GEOCODE_API_KEY=tu_clave  # Windows
+export GEOCODE_API_KEY=tu_clave  # Linux/Mac
+go run main.go noticias_med_2026.json resultado.json
+```
+
+### Archivo de municipios
+
+Requiere `municipiospordepartamento.json` en el mismo directorio. Estructura esperada:
+
+```json
+{
+  "ANTIOQUIA": [{"municipio": "Medellin"}, {"municipio": "Envigado"}],
+  "VALLE DEL CAUCA": [{"municipio": "Cali"}, {"municipio": "Palmira"}]
+}
+```
