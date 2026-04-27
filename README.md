@@ -1,5 +1,12 @@
 # Extractor de noticias — Qhubo / Google News RSS
 
+> **Nota de confidencialidad** — Este repositorio se publica el 27 de abril de 2026
+> exclusivamente como muestra del trabajo desarrollado dentro de la organización.
+> El código y los resultados corresponden a proyectos reales que hasta esta fecha
+> no habían salido del entorno interno. Se comparte con fines de portafolio para
+> proceso de selección y será removido o puesto en privado una vez concluya dicho
+> proceso.
+
 Recolector de noticias por ciudad usando Google News RSS, con desofuscación
 de URLs Protobuf y extracción de texto mediante trafilatura + BeautifulSoup
 como fallback. Parte de un proyecto de análisis de prensa regional colombiana.
@@ -132,7 +139,7 @@ Estructura esperada:
 ## Visualizaciones en PowerBI
 
 El JSON de salida de `main.go` alimenta tableros en PowerBI para explorar
-los eventos extraidos de las noticias: distribución geográfica, tipo de arma,
+los eventos extraídos de las noticias: distribución geográfica, tipo de arma,
 motivo y tendencia temporal.
 
 ### Mapa por localidad — Bogotá
